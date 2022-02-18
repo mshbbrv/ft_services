@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb-deploy
+spec:
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+        - image: influxdb_image
+          imagePullPolicy: Never
+          name: influxdb
+          ports:
+          - containerPort: 8086
+            name: influxdb-port
+            protocol: TCP
+          volumeMounts:
+            - name: influxdb-pv-volume
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: influxdb-pv-volume
+          persistentVolumeClaim:
+            claimName: influxdb-pv-claim
